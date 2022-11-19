@@ -7,33 +7,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] rq;
     private int count = 0;
 
-    // unit testing (required)
-    public static void main(String[] args) {
-        RandomizedQueue<Object> test = new RandomizedQueue<>();
-        if (test.isEmpty()) {
-            System.out.println("PASS isEmpty test");
-        }
-        test.enqueue(1);
-        test.enqueue(2);
-        test.enqueue(3);
-        test.enqueue(4);
-        if (test.size() == 4) {
-            System.out.println("PASS size test");
-        }
-        int randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        if (test.size() == 3) {
-            System.out.println("PASS size test");
-        }
-
-    }
-
     // construct an empty randomized queue
     public RandomizedQueue() {
         rq = (Item[]) new Object[1];
@@ -134,6 +107,32 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NoSuchElementException("randomized queue is empty, "
                                                      + "no elements can be "
                                                      + "removed");
+        }
+    }
+
+    // unit testing (required)
+    public static void main(String[] args) {
+        RandomizedQueue<Object> test = new RandomizedQueue<>();
+        if (test.isEmpty()) {
+            System.out.println("PASS isEmpty test");
+        }
+        test.enqueue(1);
+        test.enqueue(2);
+        test.enqueue(3);
+        test.enqueue(4);
+        if (test.size() == 4) {
+            System.out.println("PASS size test");
+        }
+        int randomInt = (int) test.dequeue();
+        System.out.println(randomInt + " dequeued, is it random?");
+        randomInt = (int) test.dequeue();
+        System.out.println(randomInt + " dequeued, is it random?");
+        randomInt = (int) test.dequeue();
+        System.out.println(randomInt + " dequeued, is it random?");
+        randomInt = (int) test.dequeue();
+        System.out.println(randomInt + " dequeued, is it random?");
+        if (test.size() == 3) {
+            System.out.println("PASS size test");
         }
     }
 }
