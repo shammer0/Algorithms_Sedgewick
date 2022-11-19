@@ -141,9 +141,8 @@ public class Deque<Item> implements Iterable<Item> {
         deq.removeLast();
         deq.removeFirst();
         deq.addFirst(4);
-        Iterator<Integer> itr = deq.iterator();
-        while(itr.hasNext()) {
-            StdOut.println(itr.next());
+        for(Integer num : deq) {
+            StdOut.println(num);
         }
     }
 
