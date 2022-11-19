@@ -129,7 +129,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        Deque deq = new Deque<>();
+        Deque<Integer> deq = new Deque<>();
         for(int i = 0; i < 100; i++) {
             deq.addLast(i);
             deq.removeLast();
@@ -141,7 +141,7 @@ public class Deque<Item> implements Iterable<Item> {
         deq.removeLast();
         deq.removeFirst();
         deq.addFirst(4);
-        Iterator itr = deq.iterator();
+        Iterator<Integer> itr = deq.iterator();
         while(itr.hasNext()) {
             StdOut.println(itr.next());
         }
