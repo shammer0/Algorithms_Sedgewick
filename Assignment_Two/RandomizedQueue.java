@@ -1,14 +1,16 @@
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] rq;
-    private int count = 0;
+    int count;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
         rq = (Item[]) new Object[1];
+        count = 0;
     }
 
     // is the randomized queue empty?
@@ -23,115 +25,113 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // add the item
     public void enqueue(Item item) {
-        checkNull(item);
-        count += 1;
-        if (rq.length < count) {
+        if (item == null) {
+            throw new IllegalArgumentException("enqueue exception");
+        }
+        if (count == rq.length) {
             doubleSize();
         }
-        rq[count - 1] = item;
+        rq[count++] = item;
     }
 
     // remove and return a random item
     public Item dequeue() {
-        checkEmpty();
-        int randomIndex = StdRandom.uniformInt(count);
-        Item temp = rq[randomIndex];
-        rq[randomIndex] = rq[count - 1];
-        count -= 1;
-        if (count == rq.length / 4) {
+        if (isEmpty()) {
+            throw new NoSuchElementException("dequeue exception");
+        }
+        int rand = StdRandom.uniformInt(0,count);
+        Item i = rq[rand];
+        if (rand != count - 1) {
+            rq[rand] = rq[count - 1];
+        }
+        count--;
+        if (count > 0 && count == rq.length / 4) {
             halfSize();
         }
-        return temp;
+        return i;
     }
 
     // return a random item (but do not remove it)
     public Item sample() {
-        checkEmpty();
-        int randomIndex = StdRandom.uniformInt(count - 1);
-        return rq[randomIndex];
+        if (isEmpty()) {
+            throw new NoSuchElementException("dequeue exception");
+        }
+        return rq[StdRandom.uniformInt(0,count)];
     }
 
     // return an independent iterator over items in random order
-    public Iterator<Item> iterator() {
-        return new ReverseArrayIterator();
+    public Iterator<Item> iterator(){ 
+        return new ReverseArrayIterator(); 
     }
 
-    private class ReverseArrayIterator implements Iterator<Item> {
+private class ReverseArrayIterator implements Iterator<Item> {
         private int i = count;
+        private boolean[] arr = new boolean[i];
 
         public boolean hasNext() {
-            return i > 0;
-        }
-
-        public Item next() {
-            if (i - 1 < 0) {
-                throw new NoSuchElementException("there are no more elements");
-            }
-            return rq[--i];
+             return i > 0; 
         }
 
         public void remove() {
-            throw new UnsupportedOperationException("remove not enabled");
+            throw new UnsupportedOperationException("remove exception");
         }
-
+        public Item next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("next exception");
+            }
+            int rand = StdRandom.uniformInt(0,count);
+            while(arr[rand]) {
+                rand = StdRandom.uniformInt(0,count);
+            }
+            arr[rand] = true;
+            i--;
+            return rq[rand];
+        }
     }
 
     private void doubleSize() {
-        int currentLength = rq.length;
-        Item[] tempRq = (Item[]) new Object[currentLength * 2];
-        for (int i = 0; i < currentLength; i++) {
+        Item[] tempRq = (Item[]) new Object[rq.length * 2];
+        for(int i = 0; i < count; i++) {
             tempRq[i] = rq[i];
         }
         rq = tempRq;
     }
 
     private void halfSize() {
-        int currentLength = rq.length;
-        Item[] tempRq = (Item[]) new Object[(int) (currentLength / 2)];
-        for (int i = 0; i < count; i++) {
+        Item[] tempRq = (Item[]) new Object[rq.length / 2];
+        for(int i = 0; i < count; i++) {
             tempRq[i] = rq[i];
         }
         rq = tempRq;
     }
 
-    private void checkNull(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("null item enqueues are "
-                                                       + "disallowed");
-        }
-    }
-
-    private void checkEmpty() {
-        if (count == 0) {
-            throw new NoSuchElementException("randomized queue is empty, "
-                                                     + "no elements can be "
-                                                     + "removed");
-        }
-    }
-
     // unit testing (required)
     public static void main(String[] args) {
-        RandomizedQueue<Object> test = new RandomizedQueue<>();
-        if (test.isEmpty()) {
-            System.out.println("PASS isEmpty test");
+        RandomizedQueue<Integer> rndQ = new RandomizedQueue<>();
+        StdOut.println(rndQ.isEmpty());
+        StdOut.println(rndQ.size());
+        rndQ.enqueue(6);
+        StdOut.println(rndQ.isEmpty());
+        StdOut.println(rndQ.size());
+        StdOut.println(rndQ.sample());
+        StdOut.println(rndQ.isEmpty());
+        StdOut.println(rndQ.size());
+        StdOut.println(rndQ.dequeue());
+        StdOut.println(rndQ.isEmpty());
+        StdOut.println(rndQ.size());
+        StdOut.println("Enqueue\n");
+        for(int i = 0; i < 10; i++) {
+            rndQ.enqueue(i);
         }
-        test.enqueue(1);
-        test.enqueue(2);
-        test.enqueue(3);
-        test.enqueue(4);
-        if (test.size() == 4) {
-            System.out.println("PASS size test");
+        for(Integer i : rndQ) {
+            StdOut.println(i);
         }
-        int randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        randomInt = (int) test.dequeue();
-        System.out.println(randomInt + " dequeued, is it random?");
-        if (test.size() == 3) {
-            System.out.println("PASS size test");
+        StdOut.println("Dequeue\n");
+        for(int i = 0; i < 10; i++) {
+            rndQ.dequeue();
+        }
+        for(Integer i : rndQ) {
+            StdOut.println(i);
         }
     }
 }
