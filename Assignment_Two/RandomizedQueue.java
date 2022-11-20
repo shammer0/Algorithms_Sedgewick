@@ -127,7 +127,7 @@ private class ReverseArrayIterator implements Iterator<Item> {
             StdOut.println(i);
         }
         StdOut.println("Dequeue\n");
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 5; i++) {
             rndQ.dequeue();
         }
         for(Integer i : rndQ) {
