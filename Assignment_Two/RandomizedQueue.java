@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] rq;
-    int count;
+    private int count;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
